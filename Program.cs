@@ -17,12 +17,22 @@ builder.Services.AddDbContext<ApplicationDBContext>(x =>
 
 // services
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IMenuService, MenuService>();
+builder.Services.AddTransient<ISubmenuService, SubmenuService>();
+builder.Services.AddTransient<IReservationService, ReservationService>();
 
 // GraphQL
 builder.Services.AddScoped<ProductType>();
 builder.Services.AddScoped<ProductQuery>();
-builder.Services.AddScoped<ProductMutation>();
-builder.Services.AddScoped<ISchema, ProductSchema>();
+//builder.Services.AddScoped<ProductMutation>();
+
+// Menu Service Injection
+builder.Services.AddScoped<MenuType>();
+builder.Services.AddScoped<MenuQuery>();
+//builder.Services.AddScoped<MenuMutation>();
+
+builder.Services.AddScoped<RootQuery>();
+builder.Services.AddScoped<ISchema, RootSchema>();
 
 builder.Services.AddGraphQL(options => options.EnableMetrics = false).AddSystemTextJson();
 
