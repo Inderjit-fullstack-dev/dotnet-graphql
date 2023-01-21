@@ -1,27 +1,25 @@
-﻿using DotnetWithGraphQL.Models;
+﻿using DotnetWithGraphQL.Data;
+using DotnetWithGraphQL.Models;
 using DotnetWithGraphQL.Services.Contracts;
 
 namespace DotnetWithGraphQL.Services.Implementations
 {
     public class ProductService : IProductService
     {
-        private List<Product> products;
-        public ProductService()
+        private readonly ApplicationDBContext _context;
+        public ProductService(ApplicationDBContext context)
         {
-            products = new List<Product>
-            {
-                new Product { Id = 1, Name = "Tea", Price = 50.00 },
-                new Product { Id = 2, Name = "Coffie", Price = 100.00 },
-            };
+            _context = context;
         }
+
         public List<Product> GetAllProducts()
         {
-            return products;
+            return _context.Products.ToList();
         }
 
         public Product? GetProductById(long id)
         {
-            var product = products.Find(x => x.Id == id);
+            var product = _context.Products.Find(id);
             if (product == null)
                 throw new Exception("Product not found");
 
@@ -30,27 +28,30 @@ namespace DotnetWithGraphQL.Services.Implementations
 
         public Product AddProduct(Product product)
         {
-            products.Add(product);
+            _context.Products.Add(product);
+            _context.SaveChanges();
             return product;
         }
 
         public void DeleteProduct(long id)
         {
-            var index = products.FindIndex(x => x.Id == id);
-            if (index == -1)
+            var product = _context.Products.Find(id);
+            if (product == null)
                 throw new Exception("Product not found");
 
-            products.RemoveAt(index);
+            _context.Products.Remove(product);
+            _context.SaveChanges();
         }
 
         public Product UpdateProduct(long id, Product product)
         {
-            var productInDB = products.Find(x => x.Id == id);
+            var productInDB = _context.Products.Find(id);
             if (productInDB == null)
                 throw new Exception("Product not found");
 
             productInDB.Name = product.Name;
             productInDB.Price = product.Price;
+            _context.SaveChanges();
 
             return productInDB;
         }
