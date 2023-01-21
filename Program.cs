@@ -1,4 +1,5 @@
 using DotnetWithGraphQL.Data;
+using DotnetWithGraphQL.Infrastructure.GQL.Mutation;
 using DotnetWithGraphQL.Infrastructure.GQL.Query;
 using DotnetWithGraphQL.Infrastructure.GQL.Schema;
 using DotnetWithGraphQL.Infrastructure.GQL.Type;
@@ -21,6 +22,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(x =>
 // GraphQL
 builder.Services.AddSingleton<ProductType>();
 builder.Services.AddSingleton<ProductQuery>();
+builder.Services.AddSingleton<ProductMutation>();
 builder.Services.AddSingleton<ISchema, ProductSchema>();
 
 builder.Services.AddGraphQL(options => options.EnableMetrics = false).AddSystemTextJson();
